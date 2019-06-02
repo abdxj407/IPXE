@@ -9,7 +9,7 @@ menu                                     ##     ## ########  ##     ##    ###   
 menu                                     ######### ##     ## ##     ##   ## ##   ##    ## 
 menu                                     ##     ## ##     ## ##     ##  ##   ##  ##    ## 
 menu                                     ##     ## ########  ########  ##     ##  ######  
-item menu                                                           CYTS
+item menu                                                           ABDXJ
  
   choose --timeout ${menu-timeout} --default ${menu-default} selected
   goto ${selected}
