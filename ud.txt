@@ -2,8 +2,8 @@
    set menu-timeout 100
    set menu-default wds
    dhcp
-  menu CYTS IT SUPPORT
-  item wds             CYTS
+  menu IT SUPPORT
+  item wds   ITSPUPORT
   choose --timeout ${menu-timeout} --default ${menu-default} selected
   goto ${selected}
 :wds
