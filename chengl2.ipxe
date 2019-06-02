@@ -1,0 +1,77 @@
+#!ipxe
+   dhcp
+   menu Please Choose
+   item --gap --             ------------------------IT SUPPORT----------------------
+   item bios                 Boot WDS
+   item --gap --             ------------------------Linux Install-------------------
+   item centos6.8            Centos 6.8        Manual
+   item centos6.9            Centos 6.9        Manual
+   item centos7.2.115        Centos 7.2.115    Manual
+   item centos7.5.1804       Centos 7.5.1804   Manual
+   item --gap --             ------------------------Windows Setup-------------------
+   item wimboothttp          Windows Setup
+
+   item --gap --             ------------------------Advanced Options----------------
+   item custom_exit --EXIT
+   item local --Boot LocalDisk
+   item reboot  --Reboot   
+
+
+
+choose --default bios --timeout 30000 custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
+goto custom_exit
+
+
+
+:bios
+chain tftp://192.168.100.200/boot\x64\wdsnbp.com
+
+:uefi
+chain tftp://192.168.100.200/boot\x64\wdsmgfw.efi
+
+:centos6.8
+set base http://172.16.200.33:81/Centos6.8/Centos6.8/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot  
+
+:centos6.9
+set base http://172.16.200.33:81/Centos6.9/Centos6.9/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+
+:centos7.2.115
+set base http://172.16.200.33:81/Centos7.2.115/Centos7.2.115/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+
+
+:centos7.5.1804
+set base http://172.16.200.33:81/Centos7.5.1804/Centos7.5.1804/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+
+:custom_exit
+chain utils.ipxe
+exit
+
+:local
+  sanboot --no-describe --drive 0x80
+
+:reboot
+  reboot
+
+
+:wimboothttp
+set base http://172.16.200.33:81/winboot/
+kernel ${base}wimboot
+initrd ${base}bcd        BCD
+initrd ${base}bootmgr    bootmgr
+initrd ${base}boot.sdi   boot.sdi
+initrd ${base}pe.wim     boot.wim
+boot
