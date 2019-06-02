@@ -1,0 +1,17 @@
+#!ipxe
+   set menu-timeout 5000
+   set menu-default wds
+   dhcp
+menu                                        ###    ########  ########  ##     ##       ## 
+menu                                       ## ##   ##     ## ##     ##  ##   ##        ## 
+menu                                      ##   ##  ##     ## ##     ##   ## ##         ## 
+menu                                     ##     ## ########  ##     ##    ###          ## 
+menu                                     ######### ##     ## ##     ##   ## ##   ##    ## 
+menu                                     ##     ## ##     ## ##     ##  ##   ##  ##    ## 
+menu                                     ##     ## ########  ########  ##     ##  ######  
+item menu                                                           CYTS
+ 
+  choose --timeout ${menu-timeout} --default ${menu-default} selected
+  goto ${selected}
+:menu
+  chain http://172.16.200.33:81/menu/efi.ipxe
