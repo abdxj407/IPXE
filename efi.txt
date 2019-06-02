@@ -1,0 +1,70 @@
+#!ipxe
+   set menu-timeout 10000
+   set menu-default wds
+   dhcp
+  menu CYTS IT SUPPORT
+  item --gap --             --------------------------------Windows Install -----------------------
+  item wds                  WDS
+  item windows              Windows Setup
+  item --gap --             ---------------------------------Linux Install-------------------------
+  item centos6.8            Centos6.8 Install Man
+  item centos6.9            Centos6.9 Install Man
+  item centos7.2.115        Centos7.2.115 Install Man
+  item centos7.5.1804       Centos7.5.1804 Install Man
+  item --gap --             ----------------------------------VMWARE Install--- -------------------
+  item esxi6.0u2            VMware Esxi-6.0.0.update02-3620759
+  item esxi6.5              VMware Esxi-6.5.0-5310538
+  item esxi6.7u1            VMware Esxi-6.7.0.update01-10764712  
+  item --gap --             ----------------------------------- Tools------------------------------  
+  item local                Local Boot
+  item reboot               Reboot
+
+  choose --timeout ${menu-timeout} --default ${menu-default} selected
+  goto ${selected}
+:wds
+  chain tftp://192.168.100.200/boot\x64\wdsmgfw.efi
+:windows
+  set base http://172.16.200.33:81/winbootefi/
+  kernel ${base}wimboot
+  initrd ${base}bcd          BCD
+  initrd ${base}bootx64.efi  bootx64.efi
+  initrd ${base}boot.sdi     boot.sdi
+  initrd ${base}boot.wim       boot.wim
+  boot
+:centos6.8
+  set base http://172.16.200.33:81/Centos6.8/Centos6.8/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot  
+:centos6.9
+  set base http://172.16.200.33:81/Centos6.9/Centos6.9/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+:centos7.2.115
+  set base http://172.16.200.33:81/Centos7.2.115/Centos7.2.115/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+:centos7.5.1804
+  set base http://172.16.200.33:81/Centos7.5.1804/Centos7.5.1804/
+  kernel ${base}/images/pxeboot/vmlinuz initrd=initrd.img repo=${base}
+  initrd ${base}/images/pxeboot/initrd.img
+  boot
+:local
+  sanboot --no-describe --drive 0x80
+:reboot
+  reboot
+:esxi6.0u2
+  set base http://172.16.200.33:81/vmware
+  set keep-san 1
+  sanboot --drive 0xff ${base}/esx6u2.iso
+:esxi6.5
+  set base http://172.16.200.33:81/vmware
+  set keep-san 1
+  sanboot --drive 0xff ${base}/esx65.iso
+:esxi6.7u1
+  set base http://172.16.200.33:81/vmware
+  set keep-san 1
+  sanboot --drive 0xff ${base}/esx67u1.iso  
+
